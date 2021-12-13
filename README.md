@@ -17,7 +17,7 @@ npm run server
 
 ## Client Package
 ```sh
-npm install axios core-js vue vuelidate vue-router
+npm install axios vue vuelidate
 ```
 
 ## Server Package
