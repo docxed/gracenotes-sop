@@ -5,22 +5,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7fc9ce28-02df-473e-ac51-1e75030d5311" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/test_server/src/main/java/com/example/test_server/controller/MembersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test_server/src/main/java/com/example/test_server/controller/MembersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_server/target/classes/com/example/test_server/TestServerApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_server/target/classes/com/example/test_server/controller/MembersController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_server/target/classes/com/example/test_server/pojo/Members.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_server/target/classes/com/example/test_server/repository/MembersRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_server/target/classes/com/example/test_server/repository/MembersService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_server/target/test-classes/com/example/test_server/TestServerApplicationTests.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="22HfPd7ivDeGMg7RxUru6ToAUC4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
     <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
   </component>
   <component name="RunManager">
     <configuration name="TestServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
@@ -31,8 +52,21 @@
       </method>
     </configuration>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7fc9ce28-02df-473e-ac51-1e75030d5311" name="Changes" comment="" />
+      <created>1639499415070</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1639499415070</updated>
+      <workItem from="1639499422687" duration="28000" />
+      <workItem from="1639499457206" duration="6000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
