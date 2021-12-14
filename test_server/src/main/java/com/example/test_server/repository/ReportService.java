@@ -3,6 +3,7 @@ package com.example.test_server.repository;
 import com.example.test_server.pojo.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,7 +17,11 @@ public class ReportService {
         this.reportRepository = reportRepository;
     }
     public ArrayList<Report> getReport(){
-       return  (ArrayList<Report>)reportRepository.findAll(Sort.by(Sort.Direction.ASC, "report_timestamp"));
+        try {
+            return (ArrayList<Report>) reportRepository.findAll(Sort.by(Sort.Direction.ASC, "report_timestamp"));
+        }catch(Exception e){
+            return new ArrayList<>();
+        }
     }
 
     public Report createReport(Report report){

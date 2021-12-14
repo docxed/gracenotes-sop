@@ -45,7 +45,8 @@ public class ReportController {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = sdf.format(new Timestamp(date.getTime()));
-        Report result = reportService.createReport(new Report(null, head, body, sid, time));
+        Report result = reportService.createReport(new Report(null, head, body, sid,
+                new Timestamp(new Date().getTime()).toString()));
         return ResponseEntity.ok(result);
     }
 }

@@ -33,11 +33,8 @@ public class ReportFeedbackController {
     public ResponseEntity<?> createReply(@RequestParam("detail") String detail,
                                          @RequestParam("sid") String sid,
                                          @RequestParam("uid") String uid){
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String time = sdf.format(new Timestamp(date.getTime()));
         ReportFeedback newReply = reportFeedbackService.createReportFeedBack(
-                new ReportFeedback(null, sid, detail, uid, time
+                new ReportFeedback(null, sid, detail, uid, new Timestamp(new Date().getTime()).toString()
                 ));
         return ResponseEntity.ok(newReply);
     }
