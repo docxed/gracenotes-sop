@@ -10,9 +10,10 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "firebase": "^7.14.6",
     "vue": "^2.6.11",
-    "vuelidate": "^0.7.6",
-    "vue-router": "^3.5.1"
+    "vue-router": "^3.5.1",
+    "vuelidate": "^0.7.6"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
