@@ -30,23 +30,31 @@ public class ReportController {
     @CrossOrigin
     @RequestMapping(value = "/report", method = RequestMethod.GET)
     public ResponseEntity<?> getReport(){
-        ArrayList<Report> rows = reportService.getReport();
-        ArrayList<ReportFeedback> rpl = reportFeedbackService.getReportFeedBack();
-        Map<String, Object> allData = new HashMap<>();
-        allData.put("0", rows);
-        allData.put("1", rpl);
-        return ResponseEntity.ok(allData);
+        try {
+            ArrayList<Report> rows = reportService.getReport();
+            ArrayList<ReportFeedback> rpl = reportFeedbackService.getReportFeedBack();
+            Map<String, Object> allData = new HashMap<>();
+            allData.put("0", rows);
+            allData.put("1", rpl);
+            return ResponseEntity.ok(allData);
+        }catch(Exception e){
+            return ResponseEntity.ok(e);
+        }
     }
 
     @RequestMapping(value = "/report", method = RequestMethod.POST)
     public ResponseEntity<?> createReport(@RequestParam("head") String head,
                                           @RequestParam("body") String body,
                                           @RequestParam("sid") String sid){
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String time = sdf.format(new Timestamp(date.getTime()));
-        Report result = reportService.createReport(new Report(null, head, body, sid,
-                new Timestamp(new Date().getTime()).toString()));
-        return ResponseEntity.ok(result);
+        try {
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time = sdf.format(new Timestamp(date.getTime()));
+            Report result = reportService.createReport(new Report(null, head, body, sid,
+                    new Timestamp(new Date().getTime()).toString()));
+            return ResponseEntity.ok(result);
+        }catch(Exception e){
+            return ResponseEntity.ok(e);
+        }
     }
 }

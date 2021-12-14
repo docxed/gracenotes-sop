@@ -17,11 +17,7 @@ public class ReportService {
         this.reportRepository = reportRepository;
     }
     public ArrayList<Report> getReport(){
-        try {
-            return (ArrayList<Report>) reportRepository.findAll(Sort.by(Sort.Direction.ASC, "report_timestamp"));
-        }catch(Exception e){
-            return new ArrayList<>();
-        }
+        return (ArrayList<Report>) reportRepository.findAll(Sort.by(Sort.Direction.ASC, "report_timestamp"));
     }
 
     public Report createReport(Report report){

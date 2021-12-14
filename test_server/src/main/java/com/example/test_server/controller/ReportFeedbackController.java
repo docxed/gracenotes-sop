@@ -19,23 +19,35 @@ public class ReportFeedbackController {
     @CrossOrigin
     @RequestMapping(value = "/reply", method = RequestMethod.GET)
     public ResponseEntity<?> getReply(){
-        ArrayList<ReportFeedback> rpl = reportFeedbackService.getReportFeedBack();
-        return ResponseEntity.ok(rpl);
+        try {
+            ArrayList<ReportFeedback> rpl = reportFeedbackService.getReportFeedBack();
+            return ResponseEntity.ok(rpl);
+        }catch(Exception e){
+            return ResponseEntity.ok(e);
+        }
     }
 
     @RequestMapping(value = "/reply/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteReply(@PathVariable("id") String id){
-        boolean status = reportFeedbackService.deleteReportFeedBack(id);
-        return ResponseEntity.ok(status);
+        try {
+            boolean status = reportFeedbackService.deleteReportFeedBack(id);
+            return ResponseEntity.ok(status);
+        }catch(Exception e){
+            return ResponseEntity.ok(e);
+        }
     }
 
     @RequestMapping(value = "/reply", method = RequestMethod.POST)
     public ResponseEntity<?> createReply(@RequestParam("detail") String detail,
                                          @RequestParam("sid") String sid,
                                          @RequestParam("uid") String uid){
-        ReportFeedback newReply = reportFeedbackService.createReportFeedBack(
-                new ReportFeedback(null, sid, detail, uid, new Timestamp(new Date().getTime()).toString()
-                ));
-        return ResponseEntity.ok(newReply);
+        try {
+            ReportFeedback newReply = reportFeedbackService.createReportFeedBack(
+                    new ReportFeedback(null, sid, detail, uid, new Timestamp(new Date().getTime()).toString()
+                    ));
+            return ResponseEntity.ok(newReply);
+        }catch(Exception e){
+            return ResponseEntity.ok(e);
+        }
     }
 }
