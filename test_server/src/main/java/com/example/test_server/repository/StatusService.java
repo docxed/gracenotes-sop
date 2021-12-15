@@ -1,6 +1,7 @@
 package com.example.test_server.repository;
 
 import com.example.test_server.pojo.Status;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ public class StatusService {
     private StatusRepository statusRepository;
 
     public StatusService(){}
+    @RabbitListener(queues = "getStatusFromSocialId")
     public ArrayList<Status> getStatusFromSocialId(String id){
         return statusRepository.getStatusBySocialId(id);
     }

@@ -16,7 +16,6 @@ public class LoginService {
         this.repository = repository;
     }
 
-    @RabbitListener(queues = "login")
     public Members login(Map<String, String> formData) {
         return repository.login(formData.get("user"), formData.get("pass"));
     }

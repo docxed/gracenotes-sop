@@ -22,7 +22,7 @@ public class CircuitBreakerApplication {
     @Autowired
     CircuitBreakerFactory circuitBreakerFactory;
 
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Object login(@RequestBody Map<String, String> formData){
         Map<String, Object> sendBack = new HashMap<>();

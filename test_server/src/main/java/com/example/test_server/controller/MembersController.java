@@ -36,16 +36,19 @@ public class MembersController {
     public ResponseEntity<?> login(@RequestBody Map<String, String> formData) {
         Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
         try {
-            Object login = rabbitTemplate.convertSendAndReceive("DircetGraceNotes", "login", formData);
+//            Object Cast = rabbitTemplate.convertSendAndReceive("DircetGraceNotes", "login", formData);
+//            Members login = (Members) Cast;
+            Members login = loginService.login(formData);
+            System.out.println(login);
             if (login == null) { // กรณีรหัสผ่านผิด ไม่มี user นี้ในระบบ (ค่า null)
                 sendBack.put("message", "รหัสนักเรียน หรือ รหัสผ่านไม่ถูกต้อง, โปรดลองอีกครั้ง");
                 sendBack.put("status", false);
             }else {
                 sendBack.put("message", "Login สำเร็จ");
                 sendBack.put("status", true);
-                sendBack.put("ses_id", ((Members) login).get_id());
-                sendBack.put("ses_user", ((Members) login).getMember_user());
-                sendBack.put("ses_level", ((Members) login).getMember_level());
+                sendBack.put("ses_id", login.get_id());
+                sendBack.put("ses_user", login.getMember_user());
+                sendBack.put("ses_level", login.getMember_level());
             }
         } catch (Exception e){
             throw e;
@@ -105,8 +108,16 @@ public class MembersController {
     @CrossOrigin
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ResponseEntity<?> getMembers() {
-        List<Members> members = membersService.getMembers();
-        return ResponseEntity.ok(members);
+        // List<Members> members = membersService.getMembers();
+        try {
+           Object Cast = rabbitTemplate.convertSendAndReceive("DircetGraceNotes", "getMember", "");
+           List<Members> members = (List<Members>) Cast;
+            return ResponseEntity.ok(members);
+        }catch (Exception e){
+            throw e;
+        }
+
+
     }
 
     @CrossOrigin

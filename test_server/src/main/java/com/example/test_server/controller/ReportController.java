@@ -32,8 +32,12 @@ public class ReportController {
     public ResponseEntity<?> getReport(){
         Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
         try {
-            ArrayList<Report> rows = reportService.getReport();
-            ArrayList<ReportFeedback> rpl = reportFeedbackService.getReportFeedBack();
+//            ArrayList<Report> rows = reportService.getReport();
+//            ArrayList<ReportFeedback> rpl = reportFeedbackService.getReportFeedBack();
+            Object Cast1 = rabbitTemplate.convertSendAndReceive("DircetGraceNotes", "getReport", "");
+            Object Cast2 = rabbitTemplate.convertSendAndReceive("DircetGraceNotes", "getReportFeedBack", "");
+            ArrayList<Report> rows = (ArrayList<Report>) Cast1;
+            ArrayList<ReportFeedback> rpl = (ArrayList<ReportFeedback>) Cast2;
             sendBack.put("rp", rows);
             sendBack.put("rpl", rpl);
         }catch(Exception e){

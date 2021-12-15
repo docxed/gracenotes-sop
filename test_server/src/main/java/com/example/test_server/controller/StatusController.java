@@ -2,6 +2,7 @@ package com.example.test_server.controller;
 
 import com.example.test_server.pojo.Status;
 import com.example.test_server.repository.StatusService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,16 @@ import java.util.Map;
 public class StatusController {
     @Autowired
     private StatusService statusService;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @CrossOrigin
     @RequestMapping(value = "/status/social/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getStatusFromSocialId(@PathVariable("id") String id){
         try {
-            ArrayList<Status> status = statusService.getStatusFromSocialId(id);
+//            ArrayList<Status> status = statusService.getStatusFromSocialId(id);
+            Object Cast = rabbitTemplate.convertSendAndReceive("DircetGraceNotes", "getStatusFromSocialId", id);
+            ArrayList<Status> status = (ArrayList<Status>) Cast;
             return ResponseEntity.ok(status);
         }catch(Exception e){
             throw e;

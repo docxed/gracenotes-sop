@@ -18,6 +18,7 @@ public class MembersService {
         this.repository = repository;
     }
 
+    @RabbitListener(queues = "getMember")
     public List<Members> getMembers() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "member_user"));
     }
