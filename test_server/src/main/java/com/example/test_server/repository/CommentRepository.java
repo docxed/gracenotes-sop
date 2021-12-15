@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+
 @Repository
 public interface CommentRepository extends MongoRepository<Comment, String> {
 
@@ -13,6 +15,6 @@ public interface CommentRepository extends MongoRepository<Comment, String> {
     public Comment findWithId(String id);
 
     @Query(value = "{social_id: '?0'}")
-    public Comment findWithSocialId(String id);
+    public ArrayList<Comment> findWithSocialId(String id);
 
 }

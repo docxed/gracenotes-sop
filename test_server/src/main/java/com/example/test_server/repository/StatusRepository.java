@@ -15,4 +15,5 @@ public interface StatusRepository extends MongoRepository<Status, String> {
 
     @Query(value = "{social_id: '?0', member_id: '?1'}")
     public ArrayList<Status> getStatusForDelete(String sid, String uid);
+
 }

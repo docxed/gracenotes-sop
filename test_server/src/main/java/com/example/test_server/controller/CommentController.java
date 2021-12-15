@@ -8,7 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @RestController
 public class CommentController {
 
@@ -44,11 +48,11 @@ public class CommentController {
         }
     }
 
+    // JOIN
     @CrossOrigin
     @RequestMapping(value = "/comment/social/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getCommentSocial(@PathVariable("id") String id) {
-        Comment comment = commentService.getCommentSocial(id);
-
+        ArrayList<Comment> comment = commentService.getCommentSocial(id);
         try {
             if (comment == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ไม่พบข้อมูล");
@@ -74,15 +78,21 @@ public class CommentController {
 
     @CrossOrigin
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
-    public ResponseEntity<?> addComment(@RequestParam("detail") String detail, @RequestParam("mem_id") String member_id, @RequestParam("social_id") String social_id) {
-
+    public ResponseEntity<?> addComment(@RequestBody Map<String, String> formData) {
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
         try{
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            Comment comment = new Comment(null, detail, member_id, social_id, timestamp+"");
-
-            commentService.addComment(comment);
-            return ResponseEntity.ok(comment);}catch(Exception e){throw e;}
-
+            Comment comment = commentService.addComment(new Comment(null, formData.get("detail"), formData.get("uid"), formData.get("member_fname"), formData.get("member_lname"), formData.get("sid"), ""+timestamp));
+            if (comment == null){
+                sendBack.put("message", "ส่งความคิดเห็นไม่สำเร็จ, โปรดลองอีกครั้ง");
+                sendBack.put("status", false);
+            }else {
+                return ResponseEntity.ok(comment);
+            }
+        }catch(Exception e){
+            throw e;
+        }
+        return ResponseEntity.ok(sendBack);
 
     }
 

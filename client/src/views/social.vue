@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -184,7 +184,7 @@
         <div
           class="content mx-auto my-3 col-lg-7 col-md-12 col-sm-12"
           v-for="comment in comments"
-          :key="comment.comment_id"
+          :key="comment._id"
         >
           <div class="d-flex">
             <div>
@@ -192,7 +192,7 @@
             </div>
             <div class="ms-auto" v-if="info.member_level == 'teacher'">
               <button
-                @click="delComment(comment.comment_id, comment.comment_detail)"
+                @click="delComment(comment._id, comment.comment_detail)"
                 class="btn btn-sm btn-outline-danger"
               >
                 ลบ
@@ -271,17 +271,17 @@ export default {
           this.myLike = data.filter(
             (array) =>
               array.status_type == "like" &&
-              array.member_id == this.info.member_id
+              array.member_id == this.info._id
           );
           this.myLove = data.filter(
             (array) =>
               array.status_type == "love" &&
-              array.member_id == this.info.member_id
+              array.member_id == this.info._id
           );
           this.mySadu = data.filter(
             (array) =>
               array.status_type == "sadu" &&
-              array.member_id == this.info.member_id
+              array.member_id == this.info._id
           );
         })
         .catch((error) => {
@@ -307,6 +307,7 @@ export default {
         .then((response) => {
           let data = response.data;
           this.socials = data;
+          this.sid = data._id;
           this.showComment();
         })
         .catch((error) => {
@@ -317,8 +318,10 @@ export default {
       axios
         .post(`http://localhost:5000/comment`, {
           detail: this.comm,
-          sid: this.sid,
-          uid: this.uid,
+          sid: this.$route.params.id,
+          uid: this.info._id,
+          member_fname: this.info.member_fname,
+          member_lname: this.info.member_lname,
         })
         .then(() => {
           this.showComment();
@@ -347,8 +350,8 @@ export default {
       axios
         .delete(`http://localhost:5000/status`, {
           params: {
-            sid: this.socials.social_id,
-            uid: this.info.member_id,
+            sid: this.socials._id,
+            uid: this.info._id,
           },
         })
         .then(() => {
@@ -362,8 +365,8 @@ export default {
       axios
         .post(`http://localhost:5000/status`, {
           type: type,
-          sid: this.socials.social_id,
-          uid: this.info.member_id,
+          sid: this.socials._id,
+          uid: this.info._id,
         })
         .then(() => {
           this.showStatus();
@@ -376,8 +379,8 @@ export default {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        this.uid = this.info.member_id;
-        this.sid = this.socials.social_id;
+        this.uid = this.info._id;
+        this.sid = this.socials._id;
         this.comment();
       } else {
         alert("please write comment");
