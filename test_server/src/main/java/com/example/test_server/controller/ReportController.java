@@ -42,6 +42,7 @@ public class ReportController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/report", method = RequestMethod.POST)
     public ResponseEntity<?> createReport(@RequestParam("head") String head,
                                           @RequestParam("body") String body,

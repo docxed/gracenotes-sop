@@ -27,6 +27,7 @@ public class ReportFeedbackController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/reply/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteReply(@PathVariable("id") String id){
         try {
@@ -37,6 +38,7 @@ public class ReportFeedbackController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/reply", method = RequestMethod.POST)
     public ResponseEntity<?> createReply(@RequestParam("detail") String detail,
                                          @RequestParam("sid") String sid,
