@@ -4,9 +4,11 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 @Data
 @Document("status")
-public class Status {
+public class Status implements Serializable {
     @Id
     private String _id;
     private String status_type;

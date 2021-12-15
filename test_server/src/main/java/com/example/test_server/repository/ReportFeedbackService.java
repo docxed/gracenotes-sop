@@ -1,6 +1,7 @@
 package com.example.test_server.repository;
 
 import com.example.test_server.pojo.ReportFeedback;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ public class ReportFeedbackService {
     public ReportFeedbackService(ReportFeedbackRepository reportFeedbackRepository){
         this.reportFeedbackRepository = reportFeedbackRepository;
     }
+    @RabbitListener(queues = "getReportFeedBack")
     public ArrayList<ReportFeedback> getReportFeedBack(){
         return (ArrayList<ReportFeedback>)reportFeedbackRepository.findAll(Sort.by(Sort.Direction.ASC, "reply_timestamp"));
     }
