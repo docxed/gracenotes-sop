@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -159,7 +159,7 @@
         <div class="content my-3" v-for="reply in replys" :key="reply.reply_id">
           <p class="text-end">
             <button
-              @click="delReply(reply.reply_id)"
+              @click="delReply(reply._id)"
               class="btn btn-outline-danger"
             >
               ลบ
@@ -227,7 +227,7 @@ export default {
           let rp = response.data.rp;
           let rpl = response.data.rpl;
           this.reports = rp.filter(
-            (array) => array.report_id == this.$route.params.id
+            (array) => array._id == this.$route.params.id
           );
           this.reports = this.reports[0];
           this.replys = rpl.filter(
@@ -273,8 +273,8 @@ export default {
       this.$v.$touch();
 
       if(!this.$v.$invalid){
-        this.sid = this.reports.report_id;
-      this.uid = this.info.member_id;
+        this.sid = this.reports._id;
+      this.uid = this.info._id;
       this.reply();
       }
       

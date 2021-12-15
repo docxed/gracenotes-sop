@@ -25,18 +25,20 @@ public class SocialService {
         try{return repository.findWithId(id);}catch(Exception e){throw e;}
     }
 
-    public void deleteSocial(String id){
+    public Boolean deleteSocial(String id){
 
-        try{repository.deleteById(id);}catch(Exception e){throw e;}
+        try{repository.deleteById(id);
+        return true;
+        }catch(Exception e){
+            return false;
+        }
 
     };
 
     public Social addSocial(Social social){
 
 
-
         try{return repository.save(social);}catch(Exception e){throw e;}
-
 
     }
 

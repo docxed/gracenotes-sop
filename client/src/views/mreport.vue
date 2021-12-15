@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -113,7 +113,7 @@
       >
       <br /><br />
 
-      <div class="row my-3">
+      <div class="row my-3" v-show="false">
         <div class="col-auto">
           <input
             v-model="$v.sr.$model" :class="{'is-danger text-danger': $v.sr.$error}"
@@ -142,15 +142,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="report in reports" :key="report.report_id">
+          <tr v-for="report in reports" :key="report._id">
             <td class="text-center">
-              {{ report.report_id }}
+              {{ report._id }}
             </td>
             <td class="text-center">
               {{ report.report_topic }}
             </td>
             <td class="text-center">
-              <a :href="'/reply/' + report.report_id">
+              <a :href="'/reply/' + report._id">
                 <span class="badge bg-secondary" v-if="report.totalReply == 0"
                   >รอการตอบกลับ</span
                 >
@@ -212,7 +212,7 @@ export default {
           this.reports.forEach((item, index) => {
             let cout = 0;
             this.replys.forEach((jtem) => {
-              if (item.report_id == jtem.report_id) {
+              if (item._id == jtem.report_id) {
                 cout++;
               }
             });

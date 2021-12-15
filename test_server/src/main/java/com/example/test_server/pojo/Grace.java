@@ -18,12 +18,13 @@ public class Grace {
     private String grace_img;
     private String grace_check;
     private String member_id;
+    private String member_fname;
+    private String member_lname;
     private String grace_timestamp;
 
     public Grace(){}
 
-    public Grace(String _id, String grace_time, String grace_date, String grace_detail, String grace_agency, String grace_img, String grace_check, String member_id, String grace_timestamp) {
-
+    public Grace(String _id, String grace_time, String grace_date, String grace_detail, String grace_agency, String grace_img, String grace_check, String member_id, String member_fname, String member_lname, String grace_timestamp) {
         this._id = _id;
         this.grace_time = grace_time;
         this.grace_date = grace_date;
@@ -32,10 +33,8 @@ public class Grace {
         this.grace_img = grace_img;
         this.grace_check = grace_check;
         this.member_id = member_id;
+        this.member_fname = member_fname;
+        this.member_lname = member_lname;
         this.grace_timestamp = grace_timestamp;
-
-
-
     }
-
 }

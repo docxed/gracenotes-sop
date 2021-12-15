@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -114,9 +114,9 @@
       <br /><br />
 
       <p class="text-center">
-        <a :href="'http://localhost:5000' + users.member_img" target="_blank"
+        <a :href="users.member_img" target="_blank"
           ><img
-            :src="'http://localhost:5000' + users.member_img"
+            :src="users.member_img"
             class="img-fluid"
             style="border-radius: 8px; width: 25%"
             alt=""
@@ -126,7 +126,7 @@
         <h3>
           ผู้ใช้หมายเลข
           <span class="text-primary">
-            {{ users.member_id }}
+            {{ users._id }}
           </span>
         </h3>
         <form action="app.php?func=profile" method="POST">
@@ -213,7 +213,7 @@
             required
           />
           <br />
-          <p class="text-center" v-if="users.member_id != info.member_id">
+          <p class="text-center" v-if="users._id != info._id">
             <span v-if="users.member_level == 'student'">
               <input
                 @click="level('teacher')"
@@ -289,7 +289,7 @@ export default {
       );
       if (con) {
         axios
-          .delete(`http://localhost:5000/user/${this.users.member_id}`)
+          .delete(`http://localhost:5000/user/${this.users._id}`)
           .then((response) => {
             let data = response.data;
             alert(data.message);
@@ -306,7 +306,7 @@ export default {
       axios
         .put(`http://localhost:5000/user/level`, {
           level: type,
-          sid: this.users.member_id,
+          sid: this.users._id,
         })
         .then((response) => {
           let data = response.data;

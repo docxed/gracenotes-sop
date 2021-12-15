@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -158,7 +158,7 @@
             <div
               class="col-lg-3 col-md-6 col-sm-12"
               v-for="graces in graceTotal"
-              :key="graces.grace_id"
+              :key="graces._id"
             >
               <div class="card">
                 <div class="card-body">
@@ -188,8 +188,8 @@
                   </p>
                 </div>
                 <a
-                  :href="'/view/' + graces.grace_id"><img
-                    :src="'http://localhost:5000' + graces.grace_img"
+                  :href="'/view/' + graces._id"><img
+                    :src="graces.grace_img"
                     class="rounded card-img-bottom"
                 /></a>
               </div>
@@ -239,10 +239,10 @@
                   </p>
                 </div>
                 <a
-                  :href="'/view/' + graces.grace_id"
+                  :href="'/view/' + graces._id"
                   target="_blank"
                   ><img
-                    :src="'http://localhost:5000' + graces.grace_img"
+                    :src="graces.grace_img"
                     class="rounded card-img-bottom"
                 /></a>
               </div>
@@ -262,7 +262,7 @@
               <div
               class="col-lg-3 col-md-6 col-sm-12"
               v-for="graces in graceNo"
-              :key="graces.grace_id"
+              :key="graces._id"
             >
               <div class="card">
                 <div class="card-body">
@@ -292,10 +292,10 @@
                   </p>
                 </div>
                 <a
-                  :href="'/view/' + graces.grace_id"
+                  :href="'/view/' + graces._id"
                   target="_blank"
                   ><img
-                    :src="'http://localhost:5000' + graces.grace_img"
+                    :src="graces.grace_img"
                     class="rounded card-img-bottom"
                 /></a>
               </div>
@@ -341,20 +341,20 @@ export default {
         let data = response.data;
         //Total
         this.graceTotal = data.filter(
-          (array) => array.member_id == this.info.member_id
+          (array) => array.member_id == this.info._id
         );
         this.graceTotal.reverse();
         //อนุมัติ
         this.graceYes = data.filter(
           (array) =>
-            array.member_id == this.info.member_id &&
+            array.member_id == this.info._id &&
             array.grace_check == "ผ่าน"
         );
         this.graceYes.reverse();
         //ไม่อนุมัติ
         this.graceNo = data.filter(
           (array) =>
-            array.member_id == this.info.member_id &&
+            array.member_id == this.info._id &&
             array.grace_check == "ไม่ผ่าน"
         );
         this.graceNo.reverse();

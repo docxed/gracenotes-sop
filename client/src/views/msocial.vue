@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -113,7 +113,7 @@
       >
       <br /><br />
 
-      <div class="row my-3">
+      <div class="row my-3" v-show="false">
         <div class="col-auto">
           <input
           v-model="$v.sr.$model" :class="{'is-danger text-danger': $v.sr.$error}"
@@ -145,23 +145,23 @@
         </thead>
         <tbody>
           <template v-if="socials != ''">
-            <tr v-for="social in socials" :key="social.social_id">
+            <tr v-for="social in socials" :key="social._id">
               <td class="text-center">
-                {{ social.social_id }}
+                {{ social._id }}
               </td>
               <td class="text-center">
                 เผยแพร่เมื่อ {{ social.social_timestamp.substr(0, 10) }}
                 {{ social.social_timestamp.substr(11, 5) }}
               </td>
               <td class="text-center">
-                <a :href="'/msocialedit/' + social.social_id">
+                <a :href="'/msocialedit/' + social._id">
                   <button class="btn btn-secondary">
                     <i class="fas fa-edit"></i>
                   </button>
                 </a>
               </td>
               <td class="text-center">
-                <a :href="'/social/' + social.social_id">
+                <a :href="'/social/' + social._id">
                   <button class="btn btn-info">
                     <i class="fas fa-eye"></i>
                   </button>

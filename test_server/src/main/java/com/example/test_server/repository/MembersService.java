@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +26,17 @@ public class MembersService {
     }
     public Members update(Members member){
         return repository.save(member);
+    }
+    public Members updateLevel(Members member) {
+        return repository.save(member);
+    }
+    public Boolean deleteMember(String id) {
+        try {
+            repository.deleteById(id);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
 }

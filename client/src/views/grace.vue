@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -153,10 +153,10 @@
             </p>
           </div>
           <a
-            :href="'http://localhost:5000' + graces[0].grace_img"
+            :href="graces[0].grace_img"
             target="_blank"
             ><img
-              :src="'http://localhost:5000' + graces[0].grace_img"
+              :src="graces[0].grace_img"
               class="rounded card-img-bottom"
           /></a>
         </div>
@@ -205,7 +205,7 @@ export default {
       .then((response) => {
         let data = response.data;
         this.graces = data.filter(
-          (array) => array.member_id == this.info.member_id
+          (array) => array.member_id == this.info._id
         );
         this.graces.reverse(); //order by desc
       })

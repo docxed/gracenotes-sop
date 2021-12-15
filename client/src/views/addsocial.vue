@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -118,9 +118,9 @@
         v-if="graces != ''"
       >
         <p class="text-center">
-          <a :href="'http://localhost:5000' + graces.grace_img" target="_blank">
+          <a :href="graces.grace_img" target="_blank">
             <img
-              :src="'http://localhost:5000' + graces.grace_img"
+              :src="graces.grace_img"
               alt=""
               class="img-fluid rounded"
             />
@@ -224,7 +224,7 @@ export default {
         .get(`http://localhost:5000/grace/${this.$route.params.id}`)
         .then((response) => {
           let data = response.data;
-          this.graces = data[0];
+          this.graces = data;
         })
         .catch((error) => {
           console.log(error);
@@ -248,7 +248,7 @@ export default {
     },
     validate() {
       this.img = this.graces.grace_img;
-      this.uid = this.info.member_id;
+      this.uid = this.info._id;
       let con = confirm("ยืนยันเผยแพร่ ?")
       if (con) {
           this.Social();

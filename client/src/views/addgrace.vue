@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -72,7 +72,9 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li>
-                  <a class="dropdown-item" href="/mygrace">บันทึกความดีของฉัน</a>
+                  <a class="dropdown-item" href="/mygrace"
+                    >บันทึกความดีของฉัน</a
+                  >
                 </li>
                 <li><a class="dropdown-item" href="/profile">การตั้งค่า</a></li>
                 <li>
@@ -103,30 +105,39 @@
         <label for="time">จำนวนเวลาที่ทำความดี</label>
         <input
           type="time"
-          v-model="$v.time.$model" :class="{'is-danger text-danger': $v.time.$error}"
+          v-model="$v.time.$model"
+          :class="{ 'is-danger text-danger': $v.time.$error }"
           class="form-control"
           name="time"
           required
         />
         <template v-if="$v.time.$error">
-          <p class="help text-danger" v-if="!$v.time.required">Thisfield is required</p>
+          <p class="help text-danger" v-if="!$v.time.required">
+            Thisfield is required
+          </p>
         </template>
         <label for="date">วันที่ทำความดี</label>
         <input
           type="date"
-          v-model="$v.date.$model" :class="{'is-danger text-danger': $v.date.$error}"
+          v-model="$v.date.$model"
+          :class="{ 'is-danger text-danger': $v.date.$error }"
           class="form-control"
           name="date"
           required
         />
         <template v-if="$v.date.$error">
-          <p class="help text-danger" v-if="!$v.date.required">Thisfield is required</p>
-          <p class="help text-danger" v-if="!$v.date.date">Please insert date correctly</p>
+          <p class="help text-danger" v-if="!$v.date.required">
+            Thisfield is required
+          </p>
+          <p class="help text-danger" v-if="!$v.date.date">
+            Please insert date correctly
+          </p>
         </template>
         <div class="form-floating mt-3">
           <textarea
             class="form-control"
-            v-model="$v.detail.$model" :class="{'is-danger text-danger': $v.detail.$error}"
+            v-model="$v.detail.$model"
+            :class="{ 'is-danger text-danger': $v.detail.$error }"
             placeholder="รายละเอียดการทำความดี"
             name="detail"
             style="height: 80px"
@@ -134,15 +145,20 @@
             required
           ></textarea>
           <template v-if="$v.detail.$error">
-          <p class="help text-danger" v-if="!$v.detail.required">This field is required</p>
-          <p class="help text-danger" v-if="!$v.detail.minLength">This field must contain at least 10 letters</p>
-        </template>
+            <p class="help text-danger" v-if="!$v.detail.required">
+              This field is required
+            </p>
+            <p class="help text-danger" v-if="!$v.detail.minLength">
+              This field must contain at least 10 letters
+            </p>
+          </template>
           <label for="floatingTextarea">รายละเอียดการทำความดี</label>
         </div>
         <div class="form-floating mb-3 mt-3">
           <input
             type="text"
-            v-model="$v.agency.$model" :class="{'is-danger text-danger': $v.agency.$error}"
+            v-model="$v.agency.$model"
+            :class="{ 'is-danger text-danger': $v.agency.$error }"
             class="form-control"
             id="floatingInput"
             name="agency"
@@ -151,9 +167,13 @@
             required
           />
           <template v-if="$v.agency.$error">
-          <p class="help text-danger" v-if="!$v.agency.required">This field is required</p>
-          <p class="help text-danger" v-if="!$v.agency.minLength">This field must contain at least 5 letters</p>
-        </template>
+            <p class="help text-danger" v-if="!$v.agency.required">
+              This field is required
+            </p>
+            <p class="help text-danger" v-if="!$v.agency.minLength">
+              This field must contain at least 5 letters
+            </p>
+          </template>
           <label for="floatingInput">หน่วยงานที่ทำความดี</label>
         </div>
         <div v-for="image in images" :key="image.id">
@@ -169,12 +189,16 @@
         <input
           type="file"
           name="img"
+          id="files"
           accept="image/png, image/jpeg, image/webp"
           @change="selectImages"
           required
+          multiple
         />
         <template v-if="$v.images.$error">
-          <p class="help text-danger" v-if="!$v.images.images">Must Upload The picture</p>
+          <p class="help text-danger" v-if="!$v.images.images">
+            Must Upload The picture
+          </p>
         </template>
         <br />
         <p class="text-center">
@@ -185,28 +209,25 @@
             @click="validate()"
           />
         </p>
-        
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {required, maxLength} from 'vuelidate/lib/validators'
+import { required, maxLength } from "vuelidate/lib/validators";
 import axios from "axios";
+import firebase from "firebase";
 
-function images(){
-   return (!(this.images.length == 0) )
+function images() {
+  return !(this.images.length == 0);
 }
-
-
-
 
 export default {
   data() {
     return {
       info: null,
-      time: "",
+      time: "00:00",
       date: "",
       detail: "",
       agency: "",
@@ -215,31 +236,27 @@ export default {
     };
   },
 
-  validations:{
-    time:{
-      required,
-      
-      
-    },
-    date:{
-      required,
-      maxValue: value => value < new Date().toISOString(),
-    },
-    detail:{
+  validations: {
+    time: {
       required,
     },
-    agency:{
+    date: {
       required,
-      maxLength: maxLength(50)
-      
+      maxValue: (value) => value < new Date().toISOString(),
     },
-    images:{
+    detail: {
       required,
-      images: images
     },
-
+    agency: {
+      required,
+      maxLength: maxLength(50),
+    },
+    images: {
+      required,
+      images: images,
+    },
   },
-  
+
   created() {
     this.info = JSON.parse(localStorage.getItem("formLogin"));
     if (this.info == null) {
@@ -258,38 +275,107 @@ export default {
   methods: {
     selectImages(event) {
       this.images = event.target.files;
+
+      this.files = event.target.files;
+      for (let i = 0; i < this.files.length; i++) {
+        console.log(this.files[i]);
+      }
     },
     showSelectImage(image) {
       // for preview only
       return URL.createObjectURL(image);
     },
     addgrace() {
-      let formData = new FormData();
-      formData.append("time", this.time);
-      formData.append("date", this.date);
-      formData.append("detail", this.detail);
-      formData.append("agency", this.agency);
-      formData.append("sid", this.sid);
-      this.images.forEach((image) => {
-        formData.append("myImage", image);
-      });
-      axios
-      .post(`http://localhost:5000/grace`, formData)
-      .then((response) => {
-        let data = response.data;
-        alert(data.message)
-        this.$router.push({ name: "mygrace" });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    },
-    validate() {
-      this.$v.$touch();
-      if(!this.$v.$invalid){
-      this.sid = this.info.member_id;
-      this.addgrace()
+      let time = this.time;
+      let date = this.date;
+      let detail = this.detail;
+      let agency = this.agency;
+      let uid = this.info._id;
+      let member_fname = this.info.member_fname;
+      let member_lname = this.info.member_lname;
+      let router = this.$router;
+
+      this.btnShow = false;
+      //checks if files are selected
+      if (this.files.length != 0) {
+        //Loops through all the selected files
+        for (let i = 0; i < this.files.length; i++) {
+          //create a storage reference
+          this.imgName = "" + new Date().toISOString();
+          var storage = firebase.storage().ref(this.imgName);
+
+          //upload file
+          var upload = storage.put(this.files[i]);
+
+          //update progress bar
+          upload.on(
+            "state_changed",
+            function progress() {},
+
+            function error() {
+              alert("error uploading file");
+            },
+            function complete() {
+              storage
+                .getDownloadURL()
+                .then(function (url) {
+                  axios
+                    .post("http://localhost:5000/grace", {
+                      time: time,
+                      date: date,
+                      detail: detail,
+                      agency: agency,
+                      image: url,
+                      check: "รอการอนุมัติ",
+                      uid: uid,
+                      member_fname: member_fname,
+                      member_lname: member_lname,
+                    })
+                    .then((response) => {
+                      let data = response.data;
+                      alert(data.message);
+                      router.push({ name: "mygrace" });
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+            }
+          );
+        }
+      } else {
+        alert("No file chosen");
       }
+
+      //   let formData = new FormData();
+      //   formData.append("time", this.time);
+      //   formData.append("date", this.date);
+      //   formData.append("detail", this.detail);
+      //   formData.append("agency", this.agency);
+      //   formData.append("sid", this.sid);
+      //   this.images.forEach((image) => {
+      //     formData.append("myImage", image);
+      //   });
+      //   axios
+      //     .post(`http://localhost:5000/grace`, formData)
+      //     .then((response) => {
+      //       let data = response.data;
+      //       alert(data.message);
+      //       this.$router.push({ name: "mygrace" });
+      //     })
+      //     .catch((error) => {
+      //       console.log(error);
+      //     });
+      },
+      validate() {
+        this.$v.$touch();
+        if (!this.$v.$invalid) {
+          this.sid = this.info._id;
+          this.addgrace();
+        }
     },
   },
 };

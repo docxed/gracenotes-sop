@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -133,10 +133,10 @@
             </p>
           </div>
           <a
-            :href="'http://localhost:5000' + graces.grace_img"
+            :href="graces.grace_img"
             target="_blank"
             ><img
-              :src="'http://localhost:5000' + graces.grace_img"
+              :src="graces.grace_img"
               class="rounded card-img-bottom"
           /></a>
         </div>
@@ -176,7 +176,7 @@ export default {
       .get(`http://localhost:5000/grace/${this.$route.params.id}`)
       .then((response) => {
         let data = response.data;
-        this.graces = data[0]
+        this.graces = data
       })
       .catch((error) => {
         console.log(error);

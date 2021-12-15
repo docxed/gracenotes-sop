@@ -30,9 +30,13 @@ public class GraceService {
 
     }
 
-    public void deleteGrace(String id){
-
-        try{repository.deleteById(id);}catch(Exception e){throw e;}
+    public Boolean deleteGrace(String id){
+        try{
+            repository.deleteById(id);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
 
     };
 

@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -115,14 +115,14 @@
       <h3 class="text-center">
         หมายเลขบันทึก
         <span class="text-primary">
-          {{ graces.grace_id }}
+          {{ graces._id }}
         </span>
       </h3>
       <br />
       <div class="col-lg-5 col-md-12 col-sm-12 mx-auto">
-        <a :href="'http://localhost:5000' + graces.grace_img" target="_blank">
+        <a :href="graces.grace_img" target="_blank">
           <img
-            :src="'http://localhost:5000' + graces.grace_img"
+            :src="graces.grace_img"
             alt=""
             class="img-fluid rounded"
           />
@@ -181,7 +181,7 @@
             ลบ
           </button>
           <span v-if="graces.grace_check == 'ผ่าน'">
-          <a :href="'/addsocial/' + graces.grace_id"> <button class="btn btn-success mx-1">เผยแพร่</button> </a>
+          <a :href="'/addsocial/' + graces._id"> <button class="btn btn-success mx-1">เผยแพร่</button> </a>
           </span>
         </p>
       </div>
@@ -221,7 +221,7 @@ export default {
         .get(`http://localhost:5000/grace/${this.$route.params.id}`)
         .then((response) => {
           let data = response.data;
-          this.graces = data[0];
+          this.graces = data;
         })
         .catch((error) => {
           console.log(error);
@@ -229,7 +229,8 @@ export default {
     },
     updateCheck() {
       axios
-        .put(`http://localhost:5000/grace/${this.$route.params.id}`, {
+        .put(`http://localhost:5000/grace`, {
+          sid: this.$route.params.id,
           value: this.graces.grace_check,
         })
         .then((response) => {

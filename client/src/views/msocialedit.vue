@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -120,9 +120,9 @@
         </span>
       </h3>
       <p class="text-center col-lg-6 col-md-12 col-sm-12 mx-auto">
-        <a :href="'http://localhost:5000' + socials.social_img" target="_blank">
+        <a :href="socials.social_img" target="_blank">
           <img
-            :src="'http://localhost:5000' + socials.social_img"
+            :src="socials.social_img"
             alt=""
             class="img-fluid rounded"
           />
@@ -215,7 +215,7 @@ export default {
         .get(`http://localhost:5000/social/${this.$route.params.id}`)
         .then((response) => {
           let data = response.data;
-          this.socials = data[0];
+          this.socials = data;
           this.detail = this.socials.social_detail
         })
         .catch((error) => {
@@ -224,9 +224,9 @@ export default {
     },
     updateSocial() {
       axios
-        .put(`http://localhost:5000/social/${this.socials.social_id}`, {
+        .put(`http://localhost:5000/social`, {
           detail: this.detail,
-          sid: this.socials.social_id,
+          sid: this.socials._id,
         })
         .then((response) => {
           let data = response.data;
@@ -241,7 +241,7 @@ export default {
       let con = confirm("คุณแน่ใจที่จะลบโพสต์นี้ ?");
       if (con) {
         axios
-          .delete(`http://localhost:5000/social/${this.socials.social_id}`)
+          .delete(`http://localhost:5000/social/${this.socials._id}`)
           .then((response) => {
             let data = response.data;
             alert(data.message);
@@ -258,7 +258,7 @@ export default {
       this.$v.$touch();
 
       if(!this.$v.$invalid){
-        this.sid = this.socials.social_id;
+        this.sid = this.socials._id;
         console.log(this.detail)
       this.updateSocial();
       }

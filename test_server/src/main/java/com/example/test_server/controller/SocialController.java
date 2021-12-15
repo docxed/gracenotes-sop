@@ -9,7 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @RestController
 public class SocialController {
 
@@ -29,36 +32,62 @@ public class SocialController {
     @CrossOrigin
     @RequestMapping(value = "/social/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteSocial(@PathVariable("id") String id) {
-        try{socialService.deleteSocial(id);
-            return ResponseEntity.ok("Delete social id:"+id);
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
+        try{
+            Boolean result = socialService.deleteSocial(id);
+            if (result == false){
+                sendBack.put("status", false);
+                sendBack.put("message", "ส่งข้อมูลไม่สำเร็จ, โปรดลองอีกครั้ง");
+            }else{
+                sendBack.put("status", true);
+                sendBack.put("message", "ดำเนินการลบโพสต์นี้แล้ว");
+            }
         }catch(Exception e){
             throw e;
         }
-
+        return ResponseEntity.ok(sendBack);
     }
     @CrossOrigin
     @RequestMapping(value = "/social", method = RequestMethod.POST)
-    public ResponseEntity<?> addSocial(@RequestParam("detail") String detail, @RequestParam("img") String img, @RequestParam("mem_id") String member_id) {
-
-        try{Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            Social social = new Social(null, detail, img, member_id, timestamp+"");
-
-            socialService.addSocial(social);
-            return ResponseEntity.ok(social);}catch(Exception e){throw e;}
+    public ResponseEntity<?> addSocial(@RequestBody HashMap<String, String> formData) {
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
+        try{
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            Social result = socialService.addSocial(new Social(null, formData.get("detail"), formData.get("img"), formData.get("uid"), timestamp+""));
+            if (result == null) {
+                sendBack.put("status", false);
+                sendBack.put("message", "ส่งข้อมูลไม่สำเร็จ, โปรดลองอีกครั้ง");
+            }else{
+                sendBack.put("status", true);
+                sendBack.put("message", "เผยแพร่แล้ว");
+                sendBack.put("id", result.get_id());
+            }
+        }catch(Exception e){
+            throw e;
+        }
+        return ResponseEntity.ok(sendBack);
 
 
     }
 
     @CrossOrigin
     @RequestMapping(value = "/social", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateSocial(@RequestParam("_id") String _id, @RequestParam("detail") String detail) {
-
+    public ResponseEntity<?> updateSocial(@RequestBody HashMap<String, String> formData) {
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
         try{
-            Social target = socialService.getSocial(_id);
-            Social NewSocial = new Social(target.get_id(), detail, target.getSocial_img(), target.getMember_id(), target.getSocial_timestamp());
-
-            socialService.updateSocial(NewSocial);
-            return ResponseEntity.ok(NewSocial);}catch(Exception e){throw e;}
+            Social target = socialService.getSocial(formData.get("sid"));
+            Social result = socialService.updateSocial(new Social(target.get_id(), formData.get("detail"), target.getSocial_img(), target.getMember_id(), target.getSocial_timestamp()));
+            if (result == null) {
+                sendBack.put("status", false);
+                sendBack.put("message", "ส่งข้อมูลไม่สำเร็จ, โปรดลองอีกครั้ง");
+            }else{
+                sendBack.put("status", true);
+                sendBack.put("message", "อัปเดตโพสต์แล้ว");
+            }
+        }catch(Exception e){
+            throw e;
+        }
+        return ResponseEntity.ok(sendBack);
 
     }
 
