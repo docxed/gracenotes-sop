@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class StatusController {
@@ -27,16 +29,22 @@ public class StatusController {
     }
     @CrossOrigin
     @RequestMapping(value = "/status", method = RequestMethod.POST)
-    public ResponseEntity<?> createStatus(@RequestParam("type") String type,
-                                          @RequestParam("sid") String sid,
-                                          @RequestParam("uid") String uid){
+    public ResponseEntity<?> createStatus(@RequestBody Map<String, String> formData){
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
         try{
-            Status newStatus = statusService.createStatus(
-                    new Status(null, type, uid, sid, new Timestamp(new Date().getTime()).toString()));
-            return  ResponseEntity.ok(newStatus);
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            Status newStatus = statusService.createStatus(new Status(null, formData.get("type"), formData.get("uid"), formData.get("sid"), ""+timestamp));
+            if (newStatus == null){
+                sendBack.put("message", "ส่งความคิดเห็นไม่สำเร็จ, โปรดลองอีกครั้ง");
+                sendBack.put("status", false);
+            }else {
+                sendBack.put("message", "แสดงสถานะสำเร็จ");
+                sendBack.put("status", true);
+            }
         }catch(Exception e){
             throw e;
         }
+        return  ResponseEntity.ok(sendBack);
     }
 
     @CrossOrigin

@@ -22,4 +22,5 @@ public class Status {
         this.social_id = social_id;
         this.status_timestamp = status_timestamp;
     }
+
 }

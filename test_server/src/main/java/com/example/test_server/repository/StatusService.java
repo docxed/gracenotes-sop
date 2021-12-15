@@ -16,12 +16,17 @@ public class StatusService {
         return statusRepository.getStatusBySocialId(id);
     }
     public Status createStatus(Status status){
-        return statusRepository.save(status);
+        try {
+            ArrayList<Status> deleteStatus = statusRepository.getStatusForDelete(status.getSocial_id(), status.getMember_id());
+            statusRepository.deleteAll(deleteStatus);
+            return statusRepository.save(status);
+        } catch (Exception e) {
+            throw e;
+        }
     }
     public boolean deleteStatus(String sid, String uid){
         try {
             ArrayList<Status> deleteStatus = statusRepository.getStatusForDelete(sid, uid);
-            System.out.println(deleteStatus);
             statusRepository.deleteAll(deleteStatus);
             return true;
         }catch(Exception e){
