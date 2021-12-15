@@ -1,8 +1,6 @@
 package com.example.test_server.controller;
 
-import com.example.test_server.pojo.Comment;
 import com.example.test_server.pojo.Grace;
-import com.example.test_server.pojo.Social;
 import com.example.test_server.repository.GraceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 @RestController
 public class GraceController {
@@ -19,8 +15,8 @@ public class GraceController {
     @Autowired
     private GraceService graceService;
 
-    @CrossOrigin
-    @RequestMapping(value = "/grace", method = RequestMethod.GET)
+    @CrossOrigin //JOIN//
+    @RequestMapping(value = "/grace", method = RequestMethod.GET) //SELECT * FROM grace JOIN members USING (member_id) ORDER BY grace_id ASC;//
     public ResponseEntity<?> getGrace() {
         try{
             List<Grace> grace = graceService.getGrace();
@@ -31,8 +27,8 @@ public class GraceController {
 
     }
 
-    @CrossOrigin
-    @RequestMapping(value = "/grace/{id}", method = RequestMethod.GET)
+    @CrossOrigin//JOIN//
+    @RequestMapping(value = "/grace/{id}", method = RequestMethod.GET) //SELECT * FROM grace JOIN members USING (member_id) WHERE grace_id = ?;//
     public ResponseEntity<?> getGrace(@PathVariable("id") String id) {
         Grace grace = graceService.getGrace(id);
 
@@ -85,7 +81,7 @@ public class GraceController {
 
     @CrossOrigin
     @RequestMapping(value = "/grace/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteComment(@PathVariable("id") String id) {
+    public ResponseEntity<?> deleteGrace(@PathVariable("id") String id) {
         try{graceService.deleteGrace(id);
             return ResponseEntity.ok("Delete grace id:"+id);
         }catch(Exception e){

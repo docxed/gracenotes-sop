@@ -14,7 +14,8 @@ public class GraceService {
     private GraceRepository repository;
 
     public GraceService(GraceRepository repository) {
-        this.repository = repository;
+        try{this.repository = repository;}catch(Exception e){throw e;}
+
     }
 
     public List<Grace> getGrace() {
