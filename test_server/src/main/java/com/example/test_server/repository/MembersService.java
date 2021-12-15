@@ -23,5 +23,8 @@ public class MembersService {
     public Members getMember(String id) {
         return repository.findWithId(id);
     }
+    public Members update(Members member){
+        return repository.save(member);
+    }
 
 }

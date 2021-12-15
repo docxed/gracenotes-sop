@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -105,20 +105,26 @@
           <label for="head">หัวข้อ</label>
           <input
             type="text"
-            v-model="$v.head.$model" :class="{'is-danger text-danger': $v.head.$error}"
+            v-model="$v.head.$model"
+            :class="{ 'is-danger text-danger': $v.head.$error }"
             class="form-control"
             placeholder="หัวข้อ"
             name="head"
             required
           />
           <template v-if="$v.head.$error">
-          <p class="help text-danger" v-if="!$v.head.required">This field is required</p>
-          <p class="help text-danger" v-if="!$v.head.maxLength">This field can contain 100 letters</p>
-        </template>
+            <p class="help text-danger" v-if="!$v.head.required">
+              This field is required
+            </p>
+            <p class="help text-danger" v-if="!$v.head.maxLength">
+              This field can contain 100 letters
+            </p>
+          </template>
           <label for="body">รายละเอียด</label>
           <textarea
             name="body"
-            v-model="$v.body.$model" :class="{'is-danger text-danger': $v.body.$error}"
+            v-model="$v.body.$model"
+            :class="{ 'is-danger text-danger': $v.body.$error }"
             class="form-control"
             placeholder="รายะเอียด"
             cols="30"
@@ -126,8 +132,10 @@
             required
           ></textarea>
           <template v-if="$v.body.$error">
-          <p class="help text-danger" v-if="!$v.body.required">This field is required</p>
-        </template>
+            <p class="help text-danger" v-if="!$v.body.required">
+              This field is required
+            </p>
+          </template>
           <br />
           <p class="text-center">
             <input
@@ -160,7 +168,7 @@
                 <div class="d-flex">
                   <a
                     style="text-decoration: none; color: black"
-                    :href="'/viewreport/' + item.report_id"
+                    :href="'/viewreport/' + item._id"
                   >
                     {{ item.report_topic }}
                   </a>
@@ -196,7 +204,7 @@
 </template>
 
 <script>
-import {required, maxLength} from 'vuelidate/lib/validators'
+import { required, maxLength } from "vuelidate/lib/validators";
 import axios from "axios";
 export default {
   data() {
@@ -208,22 +216,17 @@ export default {
       body: "",
       sid: "",
     };
-    
   },
-  validations:{
-    head:{
+  validations: {
+    head: {
       required,
-      maxLength: maxLength(100)
-      
+      maxLength: maxLength(100),
     },
-    body:{
+    body: {
       required,
-
-
-      
-    }
+    },
   },
-  
+
   created() {
     this.info = JSON.parse(localStorage.getItem("formLogin"));
     if (this.info == null) {
@@ -234,6 +237,7 @@ export default {
       .then((response) => {
         let data = response.data;
         this.info = { ...data };
+        this.sid = data._id;
       })
       .catch((error) => {
         console.log(error);
@@ -246,10 +250,13 @@ export default {
         .post(`http://localhost:5000/report`, {
           head: this.head,
           body: this.body,
-          sid: this.sid,
+          sid: this.sid
         })
-        .then(() => {
-          this.showReport()
+        .then((response) => {
+          this.head = "";
+          this.body = "";
+          alert(response.data.message)
+          this.showReport();
         })
         .catch((error) => {
           console.log(error);
@@ -262,13 +269,13 @@ export default {
           let rp = response.data.rp;
           let rpl = response.data.rpl;
           this.reports = rp.filter(
-            (array) => array.member_id == this.info.member_id
+            (array) => array.member_id == this.info._id
           );
           this.reports.reverse(); // order by desc
           for (let i = 0; i < this.reports.length; i++) {
             var cout = 0;
             for (let j = 0; j < rpl.length; j++) {
-              if (this.reports[i].report_id == rpl[j].report_id) {
+              if (this.reports[i]._id == rpl[j].report_id) {
                 cout++;
               }
             }
@@ -285,9 +292,9 @@ export default {
     validate() {
       this.$v.$touch();
 
-      if(!this.$v.$invalid){
-        this.sid = this.info.member_id;
-      this.report();
+      if (!this.$v.$invalid) {
+        this.sid = this.info._id;
+        this.report();
       }
     },
   },
