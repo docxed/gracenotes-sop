@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -113,7 +113,7 @@
       >
       <br /><br />
       <h3>จัดการบันทึกความดี</h3>
-      <div class="row my-3">
+      <div class="row my-3" v-show="false">
         <div class="col-auto">
           <input
             v-model="$v.sr.$model" :class="{'is-danger text-danger': $v.sr.$error}"
@@ -202,15 +202,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="grace in graces" :key="grace.grace_id">
+              <tr v-for="grace in graces" :key="grace._id">
                 <td class="text-center">
-                  {{ grace.grace_id }}
+                  {{ grace._id }}
                 </td>
                 <td class="text-center">
                   {{ grace.member_fname }} {{ grace.member_lname }}
                 </td>
                 <td class="text-center">
-                  <a :href="'/mview/' + grace.grace_id">
+                  <a :href="'/mview/' + grace._id">
                     <span
                       class="badge bg-secondary"
                       v-if="grace.grace_check == 'รอการอนุมัติ'"
@@ -238,16 +238,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="grace in gracesWait" :key="grace.grace_id">
+              <tr v-for="grace in gracesWait" :key="grace._id">
                 <td class="text-center">
-                  {{ grace.grace_id }}
+                  {{ grace._id }}
                 </td>
 
                 <td class="text-center">
                   {{ grace.member_fname }} {{ grace.member_lname }}
                 </td>
                 <td class="text-center">
-                  <a :href="'/mview/' + grace.grace_id">
+                  <a :href="'/mview/' + grace._id">
                     <span
                       class="badge bg-secondary"
                       v-if="grace.grace_check == 'รอการอนุมัติ'"
@@ -275,16 +275,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="grace in gracesCheck" :key="grace.grace_id">
+              <tr v-for="grace in gracesCheck" :key="grace._id">
                 <td class="text-center">
-                  {{ grace.grace_id }}
+                  {{ grace._id }}
                 </td>
 
                 <td class="text-center">
                   {{ grace.member_fname }} {{ grace.member_lname }}
                 </td>
                 <td class="text-center">
-                  <a :href="'/mview/' + grace.grace_id">
+                  <a :href="'/mview/' + grace._id">
                     <span
                       class="badge bg-secondary"
                       v-if="grace.grace_check == 'รอการอนุมัติ'"

@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @RestController
 public class GraceController {
 
@@ -30,10 +33,9 @@ public class GraceController {
     @CrossOrigin//JOIN//
     @RequestMapping(value = "/grace/{id}", method = RequestMethod.GET) //SELECT * FROM grace JOIN members USING (member_id) WHERE grace_id = ?;//
     public ResponseEntity<?> getGrace(@PathVariable("id") String id) {
-        Grace grace = graceService.getGrace(id);
-
         try {
-            if (grace == null) {
+            Grace grace = graceService.getGrace(id);
+            if (grace == null) { // กรณีรหัสผ่านผิด ไม่มี user นี้ในระบบ (ค่า null)
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ไม่พบข้อมูล");
             } else {
                 return ResponseEntity.ok(grace);
@@ -42,46 +44,66 @@ public class GraceController {
         } catch (Exception e) {
             throw e;
         }
-
-
     }
 
     @CrossOrigin
     @RequestMapping(value = "/grace", method = RequestMethod.POST)
-    public ResponseEntity<?> addGrace(@RequestParam("time") String grace_time, @RequestParam("date") String grace_date, @RequestParam("detail") String grace_detail, @RequestParam("agency") String grace_agency, @RequestParam("img") String grace_img, @RequestParam("check") String grace_check, @RequestParam("mem_id") String member_id) {
-
+    public ResponseEntity<?> addGrace(@RequestBody Map<String, String> formData) {
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
         try{
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
-            Grace grace = new Grace(null, grace_time, grace_date, grace_detail, grace_agency, grace_img, grace_check, member_id, timestamp+"");
-
-            graceService.addGrace(grace);
-            return ResponseEntity.ok(grace);}catch(Exception e){throw e;}
+            Grace grace = graceService.addGrace(new Grace(null, formData.get("time"), formData.get("date"), formData.get("detail"), formData.get("agency"), formData.get("image"), formData.get("check"), formData.get("uid"), formData.get("member_fname"), formData.get("member_lname"), ""+timestamp));
+            if (grace == null) { // กรณีรหัสผ่านผิด ไม่มี user นี้ในระบบ (ค่า null)
+                sendBack.put("message", "บันทึกความดีไม่สำเร็จ, โปรดลองอีกครั้ง");
+                sendBack.put("status", false);
+            }else {
+                sendBack.put("message", "บันทึกความดีสำเร็จ");
+                sendBack.put("status", true);
+            }
+        }catch(Exception e){
+            throw e;
+        }
+        return ResponseEntity.ok(sendBack);
     }
 
     @CrossOrigin
     @RequestMapping(value = "/grace", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateGrace(@RequestParam("_id") String _id, @RequestParam("check") String grace_check) {
-
+    public ResponseEntity<?> updateGrace(@RequestBody Map<String, String> formData) {
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
         try{
-            Grace target = graceService.getGrace(_id);
-
-            Grace NewGrace = new Grace(target.get_id(), target.getGrace_time(), target.getGrace_date(), target.getGrace_detail(), target.getGrace_agency(), target.getGrace_img(), grace_check, target.getMember_id(), target.getGrace_timestamp());
-
-            graceService.updateGrace(NewGrace);
-            return ResponseEntity.ok(NewGrace);}catch(Exception e){throw e;}
-
-
+            Grace target = graceService.getGrace(formData.get("sid"));
+            Grace NewGrace = new Grace(target.get_id(), target.getGrace_time(), target.getGrace_date(), target.getGrace_detail(), target.getGrace_agency(), target.getGrace_img(), formData.get("value"), target.getMember_id(), target.getMember_fname(), target.getMember_lname(), target.getGrace_timestamp());
+            Grace result = graceService.updateGrace(NewGrace);
+            if (result == null) { // กรณีรหัสผ่านผิด ไม่มี user นี้ในระบบ (ค่า null)
+                sendBack.put("message", "ส่งไม่สำเร็จ, โปรดลองอีกครั้ง");
+                sendBack.put("status", false);
+            }else {
+                sendBack.put("message", "อัปเดตสถานะการตรวจเป็น " + result.getGrace_check() + " แล้ว");
+                sendBack.put("status", true);
+            }
+        }catch(Exception e){
+            throw e;
+        }
+        return ResponseEntity.ok(sendBack);
     }
 
     @CrossOrigin
     @RequestMapping(value = "/grace/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteGrace(@PathVariable("id") String id) {
-        try{graceService.deleteGrace(id);
-            return ResponseEntity.ok("Delete grace id:"+id);
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
+        try{
+            boolean result = graceService.deleteGrace(id);
+            if (result == false) { // กรณีรหัสผ่านผิด ไม่มี user นี้ในระบบ (ค่า null)
+                sendBack.put("message", "ส่งไม่สำเร็จ, โปรดลองอีกครั้ง");
+                sendBack.put("status", false);
+            }else {
+                sendBack.put("message", "ลบบันทึกนี้แล้ว");
+                sendBack.put("status", true);
+            }
         }catch(Exception e){
             throw e;
         }
+        return ResponseEntity.ok(sendBack);
 
     }
 }

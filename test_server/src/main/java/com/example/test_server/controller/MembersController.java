@@ -115,4 +115,43 @@ public class MembersController {
             return ResponseEntity.ok(member);
         }
     }
+
+    @CrossOrigin
+    @RequestMapping(value = "/user/level", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateLevel(@RequestBody HashMap<String, String> formData) {
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
+        try {
+            Members member = membersService.getMember(formData.get("sid"));
+            Members result = membersService.updateLevel(new Members(member.get_id(), member.getMember_user(), member.getMember_password(), member.getMember_fname(), member.getMember_lname(), member.getMember_class(), member.getMember_no(), member.getMember_dob(), member.getMember_address(), member.getMember_img(), formData.get("level"), member.getMember_timestamp()));
+            if (result == null) {
+                sendBack.put("status", false);
+                sendBack.put("message", "ส่งข้อมูลแล้วไม่สำเร็จ, โปรดลองอีกครั้ง");
+            }else{
+                sendBack.put("status", true);
+                sendBack.put("message", "ตั้งบทบาทเป็น "+result.getMember_level()+" แล้ว");
+            }
+        } catch (Exception e){
+            throw e;
+        }
+        return ResponseEntity.ok(sendBack);
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteMember(@PathVariable("id") String id) {
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
+        try {
+            Boolean result = membersService.deleteMember(id);
+            if (result == false) {
+                sendBack.put("status", false);
+                sendBack.put("message", "ส่งข้อมูลแล้วไม่สำเร็จ, โปรดลองอีกครั้ง");
+            }else{
+                sendBack.put("status", true);
+                sendBack.put("message", "ดำเนินการลบแล้ว");
+            }
+        }catch (Exception e){
+            throw e;
+        }
+        return ResponseEntity.ok(sendBack);
+    }
 }

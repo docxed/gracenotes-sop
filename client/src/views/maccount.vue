@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -113,41 +113,55 @@
       >
       <br /><br />
 
-      <div class="row my-3">
-                <div class="col-auto">
-                    <input v-model="$v.sr.$model" :class="{'is-danger text-danger': $v.sr.$error}" type="text" class="form-control" placeholder="ค้นหา" name="key" required>
-                    <template v-if="$v.sr.$error">
-          <p class="help text-danger" v-if="!$v.sr.required">This field is required</p>
-        </template>
-                </div>
-                <div class="col-auto">
-                    <button @click="validate()" type="submit" class="btn btn-info"><i class="fas fa-search"></i></button>
-                </div>
-            </div>
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <td class="text-center">หมายเลขบัญชี</td>
-                        <td class="text-center">ชื่อ - นามสกุล</td>
-                        <td class="text-center">Option</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="user in users" :key="user.member_id">
-                        <td class="text-center">
-                            {{user.member_id}}
-                        </td>
-                        <td class="text-center">
-                            {{user.member_fname}} {{user.member_lname}}
-                        </td>
-                        <td class="text-center">
-                            <a :href="'/mprofile/' + user.member_id">
-                                <button class="btn btn-secondary"><i class="fas fa-eye"></i></button>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+      <div class="row my-3" v-show="false">
+        <div class="col-auto">
+          <input
+            v-model="$v.sr.$model"
+            :class="{ 'is-danger text-danger': $v.sr.$error }"
+            type="text"
+            class="form-control"
+            placeholder="ค้นหา"
+            name="key"
+            required
+          />
+          <template v-if="$v.sr.$error">
+            <p class="help text-danger" v-if="!$v.sr.required">
+              This field is required
+            </p>
+          </template>
+        </div>
+        <div class="col-auto">
+          <button @click="validate()" type="submit" class="btn btn-info">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <td class="text-center">หมายเลขบัญชี</td>
+            <td class="text-center">ชื่อ - นามสกุล</td>
+            <td class="text-center">Option</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users" :key="user._id">
+            <td class="text-center">
+              {{ user._id }}
+            </td>
+            <td class="text-center">
+              {{ user.member_fname }} {{ user.member_lname }}
+            </td>
+            <td class="text-center">
+              <a :href="'/mprofile/' + user._id">
+                <button class="btn btn-secondary">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
       <br /><br />
     </div>
@@ -155,7 +169,7 @@
 </template>
 
 <script>
-import {required} from 'vuelidate/lib/validators'
+import { required } from "vuelidate/lib/validators";
 import axios from "axios";
 export default {
   data() {
@@ -166,10 +180,10 @@ export default {
     };
   },
 
-  validations:{
-    sr:{
-      required: required
-    }
+  validations: {
+    sr: {
+      required: required,
+    },
   },
   created() {
     this.info = JSON.parse(localStorage.getItem("formLogin"));
@@ -199,12 +213,12 @@ export default {
           console.log(error);
         });
     },
-    search(){
-        axios
+    search() {
+      axios
         .get(`http://localhost:5000/user/search/${this.sr}`)
         .then((response) => {
-            let data = response.data;
-            this.users = data;
+          let data = response.data;
+          this.users = data;
         })
         .catch((error) => {
           console.log(error);
@@ -213,8 +227,8 @@ export default {
     validate() {
       this.$v.$touch();
 
-      if(!this.$v.$invalid){
-        this.search()
+      if (!this.$v.$invalid) {
+        this.search();
       }
     },
   },
