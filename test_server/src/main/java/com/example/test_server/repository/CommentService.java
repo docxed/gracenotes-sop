@@ -2,6 +2,7 @@ package com.example.test_server.repository;
 
 import com.example.test_server.pojo.Comment;
 import com.example.test_server.pojo.Members;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class CommentService {
         this.repository = repository;
     }
 
+
     public List<Comment> getComment() {
 
         try{
@@ -36,6 +38,7 @@ public class CommentService {
 
     }
 
+    @RabbitListener(queues = "getComment")
     public ArrayList<Comment> getCommentSocial(String id) {
 
         try{return repository.findWithSocialId(id);}catch(Exception e){throw e;}

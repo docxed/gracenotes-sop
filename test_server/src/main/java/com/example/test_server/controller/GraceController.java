@@ -2,6 +2,7 @@ package com.example.test_server.controller;
 
 import com.example.test_server.pojo.Grace;
 import com.example.test_server.repository.GraceService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +19,17 @@ public class GraceController {
     @Autowired
     private GraceService graceService;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @CrossOrigin //JOIN//
     @RequestMapping(value = "/grace", method = RequestMethod.GET) //SELECT * FROM grace JOIN members USING (member_id) ORDER BY grace_id ASC;//
     public ResponseEntity<?> getGrace() {
         try{
-            List<Grace> grace = graceService.getGrace();
+            Object Cast = rabbitTemplate.convertSendAndReceive("DircetGraceNotes", "getGrace", "");
+            List<Grace> grace = (List<Grace>) Cast;
             return ResponseEntity.ok(grace);
+
         }catch(Exception e){
             throw e;
         }

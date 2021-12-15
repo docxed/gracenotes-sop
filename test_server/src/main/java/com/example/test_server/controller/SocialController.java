@@ -3,6 +3,7 @@ package com.example.test_server.controller;
 import com.example.test_server.pojo.Grace;
 import com.example.test_server.pojo.Social;
 import com.example.test_server.repository.SocialService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,16 @@ public class SocialController {
     @Autowired
     private SocialService socialService;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+
     @CrossOrigin
     @RequestMapping(value = "/social", method = RequestMethod.GET)
     public ResponseEntity<?> getSocial() {
-        try{List<Social> social = socialService.getSocial();
+        try{
+            Object Cast = rabbitTemplate.convertSendAndReceive("DircetGraceNotes", "getSocial", "");
+            List<Social> social = (List<Social>) Cast;
             return ResponseEntity.ok(social);
         }catch(Exception e){
             throw e;

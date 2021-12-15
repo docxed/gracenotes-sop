@@ -2,6 +2,8 @@ package com.example.test_server.controller;
 
 import com.example.test_server.pojo.Comment;
 import com.example.test_server.repository.CommentService;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,9 @@ public class CommentController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @CrossOrigin
     @RequestMapping(value = "/comment", method = RequestMethod.GET)
@@ -52,7 +57,8 @@ public class CommentController {
     @CrossOrigin
     @RequestMapping(value = "/comment/social/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getCommentSocial(@PathVariable("id") String id) {
-        ArrayList<Comment> comment = commentService.getCommentSocial(id);
+        Object Cast = rabbitTemplate.convertSendAndReceive("DircetGraceNotes", "getComment", id);
+        ArrayList<Comment> comment = (ArrayList<Comment>) Cast;
         try {
             if (comment == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ไม่พบข้อมูล");

@@ -1,6 +1,7 @@
 package com.example.test_server.repository;
 
 import com.example.test_server.pojo.Grace;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class GraceService {
 
     }
 
+
+    @RabbitListener(queues = "getGrace")
     public List<Grace> getGrace() {
 
         try{return repository.findAll(Sort.by(Sort.Direction.ASC, "_id"));}catch(Exception e){throw e;}
