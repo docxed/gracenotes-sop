@@ -58,16 +58,13 @@ public class SocialController {
             socialService.updateSocial(social);
             return ResponseEntity.ok("Success on Update Social ID:" + _id);}catch(Exception e){throw e;}
 
-
     }
-
 
 
     @CrossOrigin
     @RequestMapping(value = "/social/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getSocial(@PathVariable("id") String id) {
         Social social = socialService.getSocial(id);
-
         try {
             if (social == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ไม่พบข้อมูลโพสต์");

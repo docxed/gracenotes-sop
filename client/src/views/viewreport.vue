@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -99,7 +99,7 @@
     <br /><br /><br />
 
     <div class="container">
-            <div class="col-lg-9 col-md-12 col-sm-12 mx-auto" v-for="report in reports" :key="report.report_id">
+            <div class="col-lg-9 col-md-12 col-sm-12 mx-auto" v-for="report in reports" :key="report._id">
                 <div class="content">
                     <h4>
                         {{report.report_topic}}
@@ -116,7 +116,7 @@
                 <h3>กล่องรายงานตอบกลับ</h3>
             </div>
 
-            <div class="col-lg-9 col-md-12 col-sm-12 mx-auto my-3" v-for="reply in replys" :key="'reply' + reply.reply_id">
+            <div class="col-lg-9 col-md-12 col-sm-12 mx-auto my-3" v-for="reply in replys" :key="'reply' + reply._id">
                 <div class="content">
                     <h5>
                         {{reply.reply_detail}}
@@ -167,7 +167,7 @@ export default {
           let rp = response.data.rp;
           let rpl = response.data.rpl;
           this.reports = rp.filter(
-            (array) => array.report_id == this.$route.params.id
+            (array) => array._id == this.$route.params.id
           );
           this.replys = rpl.filter(
               (array) => array.report_id == this.$route.params.id
@@ -179,7 +179,7 @@ export default {
         });
     },
     validate() {
-      this.sid = this.info.member_id;
+      this.sid = this.info._id;
       this.report();
     },
   },

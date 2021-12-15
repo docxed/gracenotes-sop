@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -105,7 +105,7 @@
         <div
           class="card mx-auto col-sm-12 col-md-6 col-lg-5 my-5"
           v-for="social in socials"
-          :key="social.social_id"
+          :key="social._id"
         >
           <div class="card-body">
             <br />
@@ -114,9 +114,9 @@
             </p>
             <br />
           </div>
-          <a :href="'/social/' + social.social_id">
+          <a :href="'/social/' + social._id">
             <img
-              :src="'http://localhost:5000' + social.social_img"
+              :src="social.social_img"
               class="rounded card-img-bottom"
             />
           </a>
@@ -146,6 +146,7 @@ export default {
       .then((response) => {
         let data = response.data;
         this.info = { ...data };
+        console.log(this.info)
       })
       .catch((error) => {
         console.log(error);

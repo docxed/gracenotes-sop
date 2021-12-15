@@ -30,31 +30,35 @@ public class ReportController {
     @CrossOrigin
     @RequestMapping(value = "/report", method = RequestMethod.GET)
     public ResponseEntity<?> getReport(){
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
         try {
             ArrayList<Report> rows = reportService.getReport();
             ArrayList<ReportFeedback> rpl = reportFeedbackService.getReportFeedBack();
-            Map<String, Object> allData = new HashMap<>();
-            allData.put("0", rows);
-            allData.put("1", rpl);
-            return ResponseEntity.ok(allData);
+            sendBack.put("rp", rows);
+            sendBack.put("rpl", rpl);
         }catch(Exception e){
-            return ResponseEntity.ok(e);
+            throw e;
         }
+        return ResponseEntity.ok(sendBack);
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/report", method = RequestMethod.POST)
-    public ResponseEntity<?> createReport(@RequestParam("head") String head,
-                                          @RequestParam("body") String body,
-                                          @RequestParam("sid") String sid){
+    public ResponseEntity<?> createReport(@RequestBody HashMap<String, String> formData){
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
         try {
-            Date date = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String time = sdf.format(new Timestamp(date.getTime()));
-            Report result = reportService.createReport(new Report(null, head, body, sid,
-                    new Timestamp(new Date().getTime()).toString()));
-            return ResponseEntity.ok(result);
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            Report result = reportService.createReport(new Report(null, formData.get("head"), formData.get("body"), formData.get("sid"), ""+timestamp));
+            if (result == null) {
+                sendBack.put("status", false);
+                sendBack.put("message", "ส่งรายงานไม่สำเร็จ");
+            }else {
+                sendBack.put("status", true);
+                sendBack.put("message", "ส่งรายงานสำเร็จ");
+            }
         }catch(Exception e){
-            return ResponseEntity.ok(e);
+            throw e;
         }
+        return ResponseEntity.ok(sendBack);
     }
 }

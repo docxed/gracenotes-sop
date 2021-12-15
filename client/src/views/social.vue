@@ -114,9 +114,9 @@
             {{ socials.social_timestamp.substr(11, 5) }}
           </p>
         </div>
-        <a :href="'http://localhost:5000' + socials.social_img" target="_blank">
+        <a :href="socials.social_img" target="_blank">
           <img
-            :src="'http://localhost:5000' + socials.social_img"
+            :src="socials.social_img"
             class="rounded card-img-bottom"
           />
         </a>
@@ -156,7 +156,8 @@
         <div class="row">
           <div class="col-7 ms-auto">
             <input
-              v-model="$v.comm.$model" :class="{'is-danger text-danger': $v.comm.$error}"
+              v-model="$v.comm.$model"
+              :class="{ 'is-danger text-danger': $v.comm.$error }"
               type="text"
               class="form-control"
               required
@@ -164,9 +165,10 @@
               placeholder="เขียนความคิดเห็น"
             />
             <template v-if="$v.comm.$error">
-          
-          <p class="help text-danger" v-if="!$v.comm.comm">This field is required</p>
-        </template>
+              <p class="help text-danger" v-if="!$v.comm.comm">
+                This field is required
+              </p>
+            </template>
           </div>
           <div class="col-auto me-auto">
             <input
@@ -213,7 +215,7 @@
 </template>
 
 <script>
-import {required} from 'vuelidate/lib/validators'
+import { required } from "vuelidate/lib/validators";
 import axios from "axios";
 export default {
   data() {
@@ -250,17 +252,11 @@ export default {
       });
   },
 
-  validations:{
-    comm:{
+  validations: {
+    comm: {
       required,
     },
-    
-
   },
-
-  
-
-
 
   methods: {
     showStatus() {
@@ -310,7 +306,7 @@ export default {
         .get(`http://localhost:5000/social/${this.$route.params.id}`)
         .then((response) => {
           let data = response.data;
-          this.socials = data[0];
+          this.socials = data;
           this.showComment();
         })
         .catch((error) => {
@@ -350,10 +346,10 @@ export default {
     statusClear() {
       axios
         .delete(`http://localhost:5000/status`, {
-            params: {
-                sid: this.socials.social_id,
-                uid: this.info.member_id
-            }
+          params: {
+            sid: this.socials.social_id,
+            uid: this.info.member_id,
+          },
         })
         .then(() => {
           this.showStatus();
@@ -377,18 +373,15 @@ export default {
         });
     },
     validate() {
-      
       this.$v.$touch();
-      
-      if(!this.$v.$invalid){
+
+      if (!this.$v.$invalid) {
         this.uid = this.info.member_id;
         this.sid = this.socials.social_id;
-      this.comment();
+        this.comment();
+      } else {
+        alert("please write comment");
       }
-      else{
-        alert("please write comment")
-      }
-      
     },
   },
 };
