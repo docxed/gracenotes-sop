@@ -1,10 +1,12 @@
 package com.example.test_server.repository;
 
 import com.example.test_server.pojo.Comment;
+import com.example.test_server.pojo.Members;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Member;
 import java.util.List;
 
 @Service
@@ -19,8 +21,12 @@ public class CommentService {
 
     public List<Comment> getComment() {
 
-        try{return repository.findAll(Sort.by(Sort.Direction.ASC, "_id"));}catch(Exception e){throw e;}
-
+        try{
+            List<Comment> allComment = repository.findAll(Sort.by(Sort.Direction.ASC, "comment_timestamp"));
+            return allComment;
+        }catch(Exception e){
+            throw e;
+        }
     }
 
     public Comment getComment(String id) {
