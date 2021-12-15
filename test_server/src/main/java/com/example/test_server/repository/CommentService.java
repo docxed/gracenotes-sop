@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Member;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,7 +36,7 @@ public class CommentService {
 
     }
 
-    public Comment getCommentSocial(String id) {
+    public ArrayList<Comment> getCommentSocial(String id) {
 
         try{return repository.findWithSocialId(id);}catch(Exception e){throw e;}
 
