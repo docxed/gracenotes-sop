@@ -80,6 +80,25 @@ public class MembersController {
     }
 
     @CrossOrigin
+    @RequestMapping(value = "/user", method = RequestMethod.PUT)
+    public ResponseEntity<?> update(@RequestBody HashMap<String, String> formData) {
+        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
+        try {
+            Members update = membersService.update(new Members(formData.get("id"), formData.get("user"), formData.get("pass"), formData.get("fname"), formData.get("lname"), formData.get("classes"), formData.get("no"), formData.get("dob"), formData.get("address"), formData.get("image"), formData.get("level"), formData.get("timestamp")));
+            if (update == null) {
+                sendBack.put("status", false);
+                sendBack.put("message", "อัปเดตข้อมูลแล้วไม่สำเร็จ");
+            }else{
+                sendBack.put("status", true);
+                sendBack.put("message", "อัปเดตข้อมูลแล้ว");
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+        return ResponseEntity.ok(sendBack);
+    }
+
+    @CrossOrigin
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ResponseEntity<?> getMembers() {
         List<Members> members = membersService.getMembers();

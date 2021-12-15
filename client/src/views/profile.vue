@@ -63,7 +63,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="'http://localhost:5000' + info.member_img"
+                  :src="info.member_img"
                   alt=""
                   style="border-radius: 8px"
                   width="30"
@@ -100,11 +100,9 @@
 
     <div class="container">
       <p class="text-center">
-        <a
-          :href="'http://localhost:5000' + formMembers.member_img"
-          target="_blank"
+        <a :href="formMembers.member_img" target="_blank"
           ><img
-            :src="'http://localhost:5000' + formMembers.member_img"
+            :src="formMembers.member_img"
             class="img-fluid"
             style="border-radius: 8px; width: 25%"
             alt=""
@@ -451,7 +449,18 @@ export default {
     update() {
       axios
         .put(`http://localhost:5000/user`, {
-          form: this.formMembers,
+          id: this.formMembers._id,
+          user: this.formMembers.member_user,
+          fname: this.fname,
+          lname: this.lname,
+          classes: this.class,
+          no: this.no,
+          dob: this.dob,
+          address: this.address,
+          pass: this.pass,
+          image: this.formMembers.member_img,
+          level: this.formMembers.member_level,
+          timestamp: this.formMembers.member_timestamp,
         })
         .then((response) => {
           let data = response.data;
@@ -473,7 +482,7 @@ export default {
         this.formMembers.member_dob = this.dob;
         this.formMembers.member_address = this.address;
         this.formMembers.member_password = this.pass;
-        this.formMembers.sid = this.formMembers.member_id;
+        this.formMembers.sid = this.formMembers._id;
         if (this.verifypass != this.oldpass) {
           alert("โปรดใส่รหัสผ่านเดิมให้ถูกต้อง");
           return;

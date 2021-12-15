@@ -29,6 +29,12 @@ public class CommentService {
 
     }
 
+    public Comment getCommentSocial(String id) {
+
+        try{return repository.findWithSocialId(id);}catch(Exception e){throw e;}
+
+    }
+
 
     public void deleteComment(String id){
 

@@ -42,8 +42,23 @@ public class CommentController {
         } catch (Exception e) {
             throw e;
         }
+    }
 
+    @CrossOrigin
+    @RequestMapping(value = "/comment/social/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCommentSocial(@PathVariable("id") String id) {
+        Comment comment = commentService.getCommentSocial(id);
 
+        try {
+            if (comment == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ไม่พบข้อมูล");
+            } else {
+                return ResponseEntity.ok(comment);
+            }
+
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @CrossOrigin
