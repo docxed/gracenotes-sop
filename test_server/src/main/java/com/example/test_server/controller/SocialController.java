@@ -1,5 +1,6 @@
 package com.example.test_server.controller;
 
+import com.example.test_server.pojo.Grace;
 import com.example.test_server.pojo.Social;
 import com.example.test_server.repository.SocialService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,11 +53,12 @@ public class SocialController {
     @RequestMapping(value = "/social", method = RequestMethod.PUT)
     public ResponseEntity<?> updateSocial(@RequestParam("_id") String _id, @RequestParam("detail") String detail) {
 
-        try{Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            Social social = new Social(_id, detail,null, null, timestamp+"");
+        try{
+            Social target = socialService.getSocial(_id);
+            Social NewSocial = new Social(target.get_id(), detail, target.getSocial_img(), target.getMember_id(), target.getSocial_timestamp());
 
-            socialService.updateSocial(social);
-            return ResponseEntity.ok("Success on Update Social ID:" + _id);}catch(Exception e){throw e;}
+            socialService.updateSocial(NewSocial);
+            return ResponseEntity.ok(NewSocial);}catch(Exception e){throw e;}
 
     }
 

@@ -43,9 +43,7 @@ public class SocialService {
     public Social updateSocial(Social social){
 
         try{
-            Social target = repository.findWithId(social.get_id());
-            Social New = new Social(target.get_id(), social.getSocial_detail(), target.getSocial_img(), target.getMember_id(), target.getSocial_timestamp());
-            return repository.save(New);
+            return repository.save(social);
 
         }catch(Exception e)
         {throw e;}
