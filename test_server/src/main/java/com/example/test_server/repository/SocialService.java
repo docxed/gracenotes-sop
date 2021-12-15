@@ -1,5 +1,6 @@
 package com.example.test_server.repository;
 import com.example.test_server.pojo.Social;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class SocialService {
         try{this.repository = repository;}catch(Exception e){throw  e;}
     }
 
+    @RabbitListener(queues = "getSocial")
     public List<Social> getSocial() {
         try{return repository.findAll(Sort.by(Sort.Direction.ASC, "_id"));}catch(Exception e){throw e;}
     }

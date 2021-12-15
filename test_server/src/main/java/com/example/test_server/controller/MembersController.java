@@ -14,6 +14,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,21 +28,24 @@ public class MembersController {
     @Autowired
     private RegisterService registerService;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @CrossOrigin
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> login(@RequestBody Map<String, String> formData) {
         Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
         try {
-            Members login = loginService.login(formData.get("user"), formData.get("pass")); // ส่งค่าไปที่ Service
+            Object login = rabbitTemplate.convertSendAndReceive("DircetGraceNotes", "login", formData);
             if (login == null) { // กรณีรหัสผ่านผิด ไม่มี user นี้ในระบบ (ค่า null)
                 sendBack.put("message", "รหัสนักเรียน หรือ รหัสผ่านไม่ถูกต้อง, โปรดลองอีกครั้ง");
                 sendBack.put("status", false);
             }else {
                 sendBack.put("message", "Login สำเร็จ");
                 sendBack.put("status", true);
-                sendBack.put("ses_id", login.get_id());
-                sendBack.put("ses_user", login.getMember_user());
-                sendBack.put("ses_level", login.getMember_level());
+                sendBack.put("ses_id", ((Members) login).get_id());
+                sendBack.put("ses_user", ((Members) login).getMember_user());
+                sendBack.put("ses_level", ((Members) login).getMember_level());
             }
         } catch (Exception e){
             throw e;
@@ -114,44 +118,5 @@ public class MembersController {
         } else {
             return ResponseEntity.ok(member);
         }
-    }
-
-    @CrossOrigin
-    @RequestMapping(value = "/user/level", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateLevel(@RequestBody HashMap<String, String> formData) {
-        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
-        try {
-            Members member = membersService.getMember(formData.get("sid"));
-            Members result = membersService.updateLevel(new Members(member.get_id(), member.getMember_user(), member.getMember_password(), member.getMember_fname(), member.getMember_lname(), member.getMember_class(), member.getMember_no(), member.getMember_dob(), member.getMember_address(), member.getMember_img(), formData.get("level"), member.getMember_timestamp()));
-            if (result == null) {
-                sendBack.put("status", false);
-                sendBack.put("message", "ส่งข้อมูลแล้วไม่สำเร็จ, โปรดลองอีกครั้ง");
-            }else{
-                sendBack.put("status", true);
-                sendBack.put("message", "ตั้งบทบาทเป็น "+result.getMember_level()+" แล้ว");
-            }
-        } catch (Exception e){
-            throw e;
-        }
-        return ResponseEntity.ok(sendBack);
-    }
-
-    @CrossOrigin
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteMember(@PathVariable("id") String id) {
-        Map<String, Object> sendBack = new HashMap<>(); // ส่งค่ากลับไปที่ Client
-        try {
-            Boolean result = membersService.deleteMember(id);
-            if (result == false) {
-                sendBack.put("status", false);
-                sendBack.put("message", "ส่งข้อมูลแล้วไม่สำเร็จ, โปรดลองอีกครั้ง");
-            }else{
-                sendBack.put("status", true);
-                sendBack.put("message", "ดำเนินการลบแล้ว");
-            }
-        }catch (Exception e){
-            throw e;
-        }
-        return ResponseEntity.ok(sendBack);
     }
 }

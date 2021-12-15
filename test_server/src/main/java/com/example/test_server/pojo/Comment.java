@@ -4,11 +4,12 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @Document("comment")
-public class Comment {
+public class Comment implements Serializable {
 
     @Id
     private String _id;
