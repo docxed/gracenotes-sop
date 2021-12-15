@@ -25,7 +25,7 @@ public class StatusController {
             throw e;
         }
     }
-
+    @CrossOrigin
     @RequestMapping(value = "/status", method = RequestMethod.POST)
     public ResponseEntity<?> createStatus(@RequestParam("type") String type,
                                           @RequestParam("sid") String sid,
@@ -39,6 +39,7 @@ public class StatusController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/status", method =RequestMethod.DELETE)
     public ResponseEntity<?> deleteStatus(@RequestParam("sid") String sid,
                                           @RequestParam("uid") String uid){
