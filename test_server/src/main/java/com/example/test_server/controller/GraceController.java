@@ -51,15 +51,12 @@ public class GraceController {
     public ResponseEntity<?> addGrace(@RequestParam("time") String grace_time, @RequestParam("date") String grace_date, @RequestParam("detail") String grace_detail, @RequestParam("agency") String grace_agency, @RequestParam("img") String grace_img, @RequestParam("check") String grace_check, @RequestParam("mem_id") String member_id) {
 
         try{
-
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
             Grace grace = new Grace(null, grace_time, grace_date, grace_detail, grace_agency, grace_img, grace_check, member_id, timestamp+"");
 
             graceService.addGrace(grace);
             return ResponseEntity.ok(grace);}catch(Exception e){throw e;}
-
-
     }
 
     @CrossOrigin
@@ -67,8 +64,6 @@ public class GraceController {
     public ResponseEntity<?> updateGrace(@RequestParam("_id") String _id, @RequestParam("check") String grace_check) {
 
         try{
-
-
             Grace target = graceService.getGrace(_id);
 
             Grace NewGrace = new Grace(target.get_id(), target.getGrace_time(), target.getGrace_date(), target.getGrace_detail(), target.getGrace_agency(), target.getGrace_img(), grace_check, target.getMember_id(), target.getGrace_timestamp());
